@@ -1,17 +1,19 @@
 import requests
 import sys
 import io
+
+import conf
+
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='gb18030')
 
 API_URL = "http://api.myapifilms.com/imdb/idIMDB"
-token = "5a01f13a-f9e4-4df6-bab8-da15354d16eb"
 
 fetchApiByParams = lambda x: requests.get(API_URL, params=x).json()
 
 
 def getMoviesByidName(idName):
     params = {
-        "token": token,
+        "token": conf.token,
         "idName": idName,
         "format": "json",
         "lang": "en-us",
@@ -22,7 +24,7 @@ def getMoviesByidName(idName):
 
 def getMoviesByName(name):
     params = {
-        "token": token,
+        "token": conf.token,
         "name": name,
         "format": "json",
         "lang": "en-us",
