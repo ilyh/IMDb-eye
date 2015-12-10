@@ -20,7 +20,7 @@ class BaseHandler(tornado.web.RequestHandler):
         return self._body_s
 
 
-class CelebrityHandler(BaseHandler):
+class ArtistHandler(BaseHandler):
 
     def get(self, q):
         pass
@@ -33,7 +33,7 @@ class MovieHandler(BaseHandler):
         # pass
 
 handlers = [
-    (r"/api/celebrity/(.+)", CelebrityHandler),
+    (r"/api/artist/(.+)", ArtistHandler),
     (r"/api/movie/(.+)", MovieHandler),
 ]
 

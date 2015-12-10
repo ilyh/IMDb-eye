@@ -8,7 +8,7 @@ API_URL = "http://www.myapifilms.com/imdb"
 fetchApiByParams = lambda x: requests.get(API_URL, params=x).json()
 
 
-def searchByIdName(idName):
+def getMoviesByidName(idName):
     params = {
         "idName": idName,
         "format": "JSON",
@@ -18,7 +18,7 @@ def searchByIdName(idName):
     return fetchApiByParams(params)["filmographies"]
 
 
-def searchByName(name):
+def getMoviesByName(name):
     params = {
         "name": name,
         "format": "JSON",
@@ -27,5 +27,10 @@ def searchByName(name):
     }
     return fetchApiByParams(params)[0]["filmographies"]
 
-print(searchByIdName("nm2244205"))
-print(searchByName('Léa Seydoux'))
+
+def getArtistsByMovieid(movieid):
+    pass
+
+
+print(getMoviesByidName("nm2244205"))
+print(getMoviesByName("Léa Seydoux"))
