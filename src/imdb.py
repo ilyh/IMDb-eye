@@ -5,6 +5,8 @@ sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='gb18030')
 
 API_URL = "http://www.myapifilms.com/imdb"
 
+fetchApiByParams = lambda x: requests.get(API_URL, params=x).json()
+
 
 def searchByIdName(idName):
     params = {
@@ -13,8 +15,17 @@ def searchByIdName(idName):
         "lang": "en-us",
         "filmography": "1"
     }
-    r = requests.get(API_URL, params=params)
-    
-    print(r.json()["filmographies"]["filmography"])
+    return fetchApiByParams(params)["filmographies"]
 
-searchByIdName("nm0000132")
+
+def searchByName(name):
+    params = {
+        "name": name,
+        "format": "JSON",
+        "lang": "en-us",
+        "filmography": "1"
+    }
+    return fetchApiByParams(params)[0]["filmographies"]
+
+print(searchByIdName("nm2244205"))
+print(searchByName('Léa Seydoux'))
