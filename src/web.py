@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
 
+from collections import namedtuple
+import json
+
 import tornado.httpserver
 import tornado.ioloop
 import tornado.web
 
 import conf
+import imdb
 
 
 class BaseHandler(tornado.web.RequestHandler):
@@ -20,10 +24,16 @@ class BaseHandler(tornado.web.RequestHandler):
         return self._body_s
 
 
-class ArtistHandler(BaseHandler):
+class ArtistIdHandler(BaseHandler):
 
     def get(self, q):
-        pass
+        all_works = imdb.getMoviesByidName(q)
+        movie_list = sum([x['filmography'] for x in all_works], [])
+        relations = {}
+        for x in movie_list[:5]:
+            relations[x["imdbid"]] = {"title": x[
+                "title"], "artists": imdb.getArtistsByMovieid(x["imdbid"])[:5]}
+        self.write_json(relations)
 
 
 class MovieHandler(BaseHandler):
@@ -33,7 +43,7 @@ class MovieHandler(BaseHandler):
         # pass
 
 handlers = [
-    (r"/api/artist/(.+)", ArtistHandler),
+    (r"/api/artist/id/(.+)", ArtistIdHandler),
     (r"/api/movie/(.+)", MovieHandler),
 ]
 
