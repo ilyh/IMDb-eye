@@ -8,7 +8,7 @@ sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='gb18030')
 
 API_URL = "http://api.myapifilms.com/imdb/idIMDB"
 
-fetchApiByParams = lambda x: requests.get(API_URL, params=x).json()
+fetchApiByParams = lambda x: requests.get(API_URL, params=x, timeout=10).json()
 
 
 def getMoviesByidName(idName):
