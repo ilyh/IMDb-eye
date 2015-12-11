@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+#coding=utf-8
 from tornado.options import define
 
 token = "5a01f13a-f9e4-4df6-bab8-da15354d16eb"

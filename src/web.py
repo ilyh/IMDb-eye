@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+#coding=utf-8
 import json
 from concurrent.futures import ThreadPoolExecutor
 
@@ -52,7 +53,6 @@ class MovieHandler(BaseHandler):
 
     def get(self, q):
         self.write("hello,world")
-        # pass
 
 handlers = [
     (r"/api/artist/id/(.+)", ArtistIdHandler),
