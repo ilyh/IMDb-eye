@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-
-from collections import namedtuple
 import json
+from concurrent.futures import ThreadPoolExecutor
 
 import tornado.httpserver
 import tornado.ioloop
 import tornado.web
+import tornado.gen
 
 import conf
 import imdb
@@ -26,13 +26,25 @@ class BaseHandler(tornado.web.RequestHandler):
 
 class ArtistIdHandler(BaseHandler):
 
+    @tornado.gen.coroutine
     def get(self, q):
-        all_works = imdb.getMoviesByidName(q)
-        movie_list = sum([x['filmography'] for x in all_works], [])
+        executor = ThreadPoolExecutor(max_workers=5)
+        all_works = yield executor.submit(imdb.getMoviesByidName, q)
+
+        # 调试时只返回前5名演员名单
+        movie_list = sum([x['filmography'] for x in all_works], [])[:5]
+
+        future_artists = {}
+        for x in movie_list:
+            future_artists[x["imdbid"]] = executor.submit(
+                imdb.getArtistsByMovieid, x["imdbid"])
+        artists = yield {x["imdbid"]: future_artists[x["imdbid"]] for x in movie_list}
+        executor.shutdown()
+
         relations = {}
-        for x in movie_list[:5]:
+        for x in movie_list:
             relations[x["imdbid"]] = {"title": x[
-                "title"], "artists": imdb.getArtistsByMovieid(x["imdbid"])[:5]}
+                "title"], "artists": artists[x["imdbid"]][:5]}
         self.write_json(relations)
 
 
