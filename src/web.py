@@ -32,7 +32,7 @@ class ArtistIdHandler(BaseHandler):
         executor = ThreadPoolExecutor(max_workers=5)
         all_works = yield executor.submit(imdb.getMoviesByidName, q)
 
-        # 调试时只返回前5名演员名单
+        # 调试时只返回前5部作品
         movie_list = sum([x['filmography'] for x in all_works], [])[:5]
 
         future_artists = {}
