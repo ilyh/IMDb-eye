@@ -45,7 +45,7 @@ class ArtistIdHandler(BaseHandler):
         relations = {}
         for x in movie_list:
             relations[x["imdbid"]] = {"title": x[
-                "title"], "artists": artists[x["imdbid"]][:5]}
+                "title"], "artists": artists[x["imdbid"]][:]}
         self.write_json(relations)
 
 
