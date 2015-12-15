@@ -20,6 +20,7 @@ var link = svg.selectAll(".link"),
 svg.append("rect").attr("class", "overlay").attr("width", width).attr("height", height);
 var node_drag = d3.behavior.drag().on("dragstart", dragstart).on("drag", dragmove).on("dragend", dragend);
 var force = d3.layout.force();
+var div = d3.select("body").append("div").attr("class", "tooltip").style("opacity", 0);
 
 function dragstart(b, a) {
     force.stop();
@@ -94,7 +95,7 @@ $(document).ready(function() {
                         });
                         nodeInfo[x.actorId] = {
                             type: 'actor',
-                            text: x.actorName
+                            text: x.actorName,
                         }
                     })
                 }
@@ -131,6 +132,7 @@ function indexOfName(name) {
 }
 
 
+
 function restart() {
     force.nodes(nodes) //指定节点数组
         .links(links) //指定连线数组
@@ -145,14 +147,24 @@ function restart() {
     svg.selectAll(".node").remove();
     link = svg.selectAll(".link").data(links).enter().append("line").attr("class", "link");
     node = svg.selectAll(".node").data(nodes).enter().append("circle").attr("r", function(d) {
-            if(nodeInfo[d.name].type==='movie'){
+            if (nodeInfo[d.name].type === 'movie') {
                 return 15;
-            }
-            else{
+            } else {
                 return 8;
             }
         }).style("fill", function(d, i) {
             return color(i);
+        })
+        .on("mouseover", function(d) {
+            if (nodeInfo[d.name].type == "actor") {
+                div.transition().duration(500).style("opacity", 0.9);
+                div.html("IMDb id: " + d.name + "<br/>name: " + nodeInfo[d.name].text ).style("left", (d3.event.pageX + 5) + "px").style("top", (d3.event.pageY + 5) + "px")
+            }
+            // fade(a, 0.1)
+        }).on("mouseout", function(d) {
+            div.transition().duration(500).style("opacity", 0);
+            div.html("");
+            // fade(a, 1);
         })
         .call(force.drag); //使得节点能够拖动
     text = svg.selectAll("text")
