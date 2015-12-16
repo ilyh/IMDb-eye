@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
-#coding=utf-8
+# coding=utf-8
 import json
+import os
 from concurrent.futures import ThreadPoolExecutor
 
 import tornado.httpserver
@@ -32,8 +33,8 @@ class ArtistIdHandler(BaseHandler):
         executor = ThreadPoolExecutor(max_workers=5)
         all_works = yield executor.submit(imdb.getMoviesByidName, q)
 
-        # 调试时只返回前5部作品
-        movie_list = sum([x['filmography'] for x in all_works], [])[:5]
+        # 调试时只返回前10部作品
+        movie_list = sum([x['filmography'] for x in all_works], [])[:10]
 
         future_artists = {}
         for x in movie_list:
@@ -54,15 +55,28 @@ class MovieHandler(BaseHandler):
     def get(self, q):
         self.write("hello,world")
 
+
+class IndexHandler(BaseHandler):
+
+    def get(self):
+        self.render("index.html")
+
 handlers = [
     (r"/api/artist/id/(.+)", ArtistIdHandler),
     (r"/api/movie/(.+)", MovieHandler),
+    (r"/", IndexHandler),
 ]
 
 if __name__ == "__main__":
     from tornado.options import options, parse_command_line
     parse_command_line()
-    app = tornado.web.Application(handlers, debug=__debug__)
+    app = tornado.web.Application(
+        handlers,
+        template_path=os.path.join(
+            os.path.dirname(__file__), "templates"),
+        static_path=os.path.join(
+            os.path.dirname(__file__), "static"),
+        debug=__debug__)
     http_server = tornado.httpserver.HTTPServer(app)
     http_server.listen(options.port)
     tornado.ioloop.IOLoop.instance().start()

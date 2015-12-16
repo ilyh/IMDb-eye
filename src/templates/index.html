@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>IMDb eye</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=1040">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <script src='{{ static_url("js/d3/d3.js") }}'></script>
+    <script src='{{ static_url("js/jquery-1.11.3.min.js") }}'></script>
+    <style>
+    .node circle {
+        cursor: pointer;
+        stroke: #3182bd;
+        stroke-width: 1.5px;
+    }
+    
+    .node text {
+        font: 10px sans-serif;
+        pointer-events: none;
+        text-anchor: start;
+    }
+    
+    .node div {
+        font: 10px sans-serif;
+        pointer-events: none;
+        text-anchor: start;
+    }
+    
+    line.link {
+        fill: none;
+        stroke: #9ecae1;
+        stroke-width: 1.5px;
+    }
+    
+    line.link:hover {
+        stroke: red;
+        stroke-width: 3px;
+    }
+    
+    .overlay {
+        fill: none;
+        pointer-events: all;
+    }
+    
+    div.tooltip {
+        position: absolute;
+        text-align: left;
+        padding: 2px;
+        font: 12px sans-serif;
+        background: lightsteelblue;
+        border: 0px;
+        border-radius: 8px;
+        pointer-events: none;
+    }
+    
+    #topbar {
+        position: fixed;
+        left: 0;
+        top: 0;
+        z-index: 2048;
+        width: 100%;
+        height: 20px;
+    }
+    
+    #draggable {
+        margin-top: 50px;
+        width: auto;
+        height: auto;
+        padding: 5px;
+        z-index: 1024;
+        position: absolute;
+    }
+    
+    #unhidediv {
+        margin-top: 50px;
+        width: auto;
+        height: auto;
+        padding: 5px;
+        z-index: 1024;
+        position: absolute;
+    }
+    
+    #rightcornerad {
+        z-index: 1024;
+        position: absolute;
+        top: 200px;
+        right: 0px;
+    }
+    
+    #hidetopbar {
+        text-decoration: underline;
+        color: blue;
+    }
+    
+    a {
+        text-decoration: underline;
+    }
+    </style>
+</head>
+
+<body>
+    <form>
+        <label for="#Artistid">Artist id</label>
+        <input type="text" id="Artistid"/>
+        <input type="button" id="submit" value="submit"/>
+    </form>
+    <script src='{{ static_url("js/index.js") }}'></script>
+</body>
+
+</html>
